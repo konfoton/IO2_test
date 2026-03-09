@@ -83,9 +83,40 @@ INSTANTIATE_TEST_SUITE_P(
     )
 );
 
+// class MaxCostTest : public ::testing::TestWithParam<std::tuple<double, double>> {};
 
+// TEST_P(MaxCostTest, StopsWhenMaxCostReached) {
+//   double hourlyRate = std::get<0>(GetParam());
+//   double maxCost = std::get<1>(GetParam());
+  
+//   GPU gpu(hourlyRate, maxCost);
+//   gpu.Start();
+  
+//   double timeNeededMs = (maxCost / hourlyRate) * 3600.0 * 1000.0 + 500.0;
+//   std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(timeNeededMs)));
+  
+//   EXPECT_EQ(gpu.GetStatus(), GPU::Status::Idle);
+//   EXPECT_LE(gpu.GetPrice(), maxCost);
+// }
 
+// TEST_P(MaxCostTest, ConstructorRejectsNegativeMaxCost) {
+//   double hourlyRate = std::get<0>(GetParam());
+//   double maxCost = std::get<1>(GetParam());
+  
+//   if (maxCost < 0) {
+//     EXPECT_THROW(GPU(hourlyRate, maxCost), std::invalid_argument);
+//   }
+// }
 
+// INSTANTIATE_TEST_SUITE_P(
+//     MaxCostTests,
+//     MaxCostTest,
+//     ::testing::Values(
+//         std::make_tuple(3600000.0, 1.0),  // $3.6M/hr = $1/ms, max $1 -> stops after ~1ms
+//         std::make_tuple(3600000.0, 2.0),  // $3.6M/hr, max $2 -> stops after ~2ms
+//         std::make_tuple(100.0, -5.0)      // Negative max cost should throw
+//     )
+// );
 
 
 int main() {
