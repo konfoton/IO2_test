@@ -10,6 +10,30 @@ class GPUTest : public ::testing::TestWithParam<std::tuple<int>> {
   GPU gpu;
 };
 
+class ConstructorTest : public ::testing::TestWithParam<std::tuple<double>> {};
+
+TEST_P(ConstructorTest, Constructor) {
+  double hourlyRate = std::get<0>(GetParam());
+  if (hourlyRate < 0) {
+    EXPECT_THROW(GPU(hourlyRate), std::invalid_argument);
+  } else {
+    EXPECT_NO_THROW(GPU(hourlyRate));
+  }
+}
+
+
+INSTANTIATE_TEST_SUITE_P(
+    PriceTests,
+    PriceTest,
+    ::testing::Values(
+        std::make_tuple(0.0),
+        std::make_tuple(10.0),
+        std::make_tuple(50.0),
+        std::make_tuple(100.0),
+        std::make_tuple(-5.0),
+        std::make_tuple(-10.0)
+    )
+);
 
 TEST_P(GPUTest, Working) {
   int mliseconds = std::get<0>(GetParam());
@@ -31,6 +55,9 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(2000)
     )
 );
+
+
+
 
 
 
