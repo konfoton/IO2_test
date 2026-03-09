@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
 #include <stdexcept>
+#include <thread>
 #include <tuple>
 #include "gpu.hpp"
-// Example test case
 class GPUTest : public ::testing::Test {
  protected:
-  GPU gpu;  // Shared GPU object for all tests
+  GPU gpu;
 };
 
 
@@ -17,9 +17,10 @@ TEST_P(GPUTest, Working) {
   float hourlyRate = std::get<0>(GetParam());
   GPU gpu(hourlyRate);
   gpu.Start();
-  sleep(30)
+  std::this_thread::sleep_for(std::chrono::milliseconds(2000));
   gpu.Stop();
-  
+  EXPEPECT_GE(runningTime, 2000.0);
+  EXPECT_LE(runningTime, 2100.0);
 }
 
   
