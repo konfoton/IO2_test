@@ -12,6 +12,8 @@ class GPUTest : public ::testing::TestWithParam<std::tuple<int>> {
 
 class ConstructorTest : public ::testing::TestWithParam<std::tuple<double>> {};
 
+class PriceTest : public ::testing::TestWithParam<std::tuple<double, int>> {};
+
 TEST_P(ConstructorTest, Constructor) {
   double hourlyRate = std::get<0>(GetParam());
   if (hourlyRate < 0) {
@@ -21,10 +23,9 @@ TEST_P(ConstructorTest, Constructor) {
   }
 }
 
-
 INSTANTIATE_TEST_SUITE_P(
-    PriceTests,
-    PriceTest,
+    ConstructorTests,
+    ConstructorTest,
     ::testing::Values(
         std::make_tuple(0.0),
         std::make_tuple(10.0),
@@ -32,6 +33,32 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(100.0),
         std::make_tuple(-5.0),
         std::make_tuple(-10.0)
+    )
+);
+
+TEST_P(PriceTest, CalculatesCorrectPrice) {
+  double hourlyRate = std::get<0>(GetParam());
+  int runTimeMs = std::get<1>(GetParam());
+  
+  GPU gpu(hourlyRate);
+  gpu.Start();
+  std::this_thread::sleep_for(std::chrono::milliseconds(runTimeMs));
+  gpu.Stop();
+  
+  double expectedHours = static_cast<double>(runTimeMs) / (1000.0 * 60.0 * 60.0);
+  double expectedPrice = expectedHours * hourlyRate;
+  
+  EXPECT_NEAR(gpu.GetPrice(), expectedPrice, expectedPrice * 0.1 + 0.0001);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    PriceTests,
+    PriceTest,
+    ::testing::Values(
+        std::make_tuple(100.0, 1000),
+        std::make_tuple(50.0, 2000),    
+        std::make_tuple(200.0, 500),   
+        std::make_tuple(0.0, 1000)     
     )
 );
 
