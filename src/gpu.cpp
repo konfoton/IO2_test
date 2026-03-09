@@ -35,3 +35,8 @@ double GPU::GetTotalRunTimeMs() const {
 GPU::Status GPU::GetStatus() const {
     return currentStatus;
 }
+
+double GPU::GetPrice() const {
+    double hours = totalRunTimeMs / (1000.0 * 60.0 * 60.0);
+    return hours * HourlyRate;
+}
