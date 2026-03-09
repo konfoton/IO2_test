@@ -9,9 +9,9 @@ public:
     };
 
     GPU();
+    GPU(double hourlyRate);
     void Start();
     void Stop();
-    double GetRunningTimeMs() const;
     double GetTotalRunTimeMs() const;
     double GetPrice() const;
     Status GetStatus() const;

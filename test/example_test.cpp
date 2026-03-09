@@ -4,23 +4,20 @@
 #include <thread>
 #include <tuple>
 #include "gpu.hpp"
-class GPUTest : public ::testing::Test {
- protected:
+
+class GPUTest : public ::testing::TestWithParam<std::tuple<double>> {
+   protected:
   GPU gpu;
 };
 
 
-class GPUTest : public ::testing::TestWithParam<std::tuple<double>> {};
-
-
 TEST_P(GPUTest, Working) {
   float hourlyRate = std::get<0>(GetParam());
-  GPU gpu(hourlyRate);
   gpu.Start();
   std::this_thread::sleep_for(std::chrono::milliseconds(2000));
   gpu.Stop();
-  EXPEPECT_GE(runningTime, 2000.0);
-  EXPECT_LE(runningTime, 2100.0);
+  EXPECT_GE(gpu.GetTotalRunTimeMs(), 2000.0);
+  EXPECT_LE(gpu.GetTotalRunTimeMs(), 2100.0);
 }
 
   
